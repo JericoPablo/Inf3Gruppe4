@@ -36,6 +36,8 @@ namespace Binaerbaum
 
             MaxProblem m = new MaxProblem(baum);
             Console.WriteLine(m.getSolution());
+            SumProblem s = new SumProblem(baum);
+            Console.WriteLine(s.getSolution());
 
             Console.ReadLine();
 

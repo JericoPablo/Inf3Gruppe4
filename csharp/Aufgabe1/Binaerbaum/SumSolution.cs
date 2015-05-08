@@ -8,5 +8,17 @@ namespace Binaerbaum
 {
     class SumSolution
     {
+        private int sum;
+        public int maxValue
+        {
+            get
+            {
+                return sum;
+            }
+            set
+            {
+                this.sum = value;
+            }
+        }
     }
 }
