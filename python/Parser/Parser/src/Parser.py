@@ -20,13 +20,13 @@ class Parser:
     calcA = []
     secoundVal = 0
     equationBool = False
-    ergGanz = 0
+    endResult = 0
     
     def parse(self, input):
         i = input[self.position]
         return self.equation(i, input, self.position)
     #Checking if there is on the begining a open-clamp or a diget 0-9 
-    #if there is one
+    #its checks if there are clamps and if its right - "EBNF"
     def equation(self, i, input, position):
             while self.positionReached:
                 if position == 0:
@@ -127,6 +127,7 @@ class Parser:
                     i = input[position]
                 else:
                     self.positionReached = False
+                    #its for if there is a ( and then again a closing one
                     if self.clampOpenCounter != self.clampCloseCounter:
                         
                         raise ValueError("Fail! You missed out a Clamp!!")
@@ -135,7 +136,7 @@ class Parser:
                                                    
 
     
-        
+        #its for checking if after a + there is a digit or not after it or a clamp or a *
     def expression(self, i, input, position):
         if position != 0:   
             if i == "+":
@@ -160,6 +161,7 @@ class Parser:
             self.expressionVal = self.term(i, input, position)
         return self.expressionVal
         
+        #for counting there clamps and checking if its a clamp or not
     def factor(self, i, input, position):
         if i == "(":
             "true"
@@ -173,7 +175,7 @@ class Parser:
         else:
             self.constant(i, input, position)
             
-     
+    #for checking if its an zero or if its a digit / digitwithoutzero
     def constant(self, i, input, position):
         if i == "0":
             self.constantVal = self.isDigit(i)
@@ -181,7 +183,7 @@ class Parser:
             self.constantVal = self.isDigitWOZero(i)   
         
         return self.constantVal
-    
+    #checking if there is a * and if there is one checking if there is a digit or not 
     def term(self, i, input, position):  
         if position != 0:
             if i == "*":
@@ -201,6 +203,7 @@ class Parser:
         
         return self.termVal
     
+    #checking if i is a digit or not
     def isDigitWOZero(self, i):  
         isIn = True 
         if i == "1" or i == "2" or i == "3" or i == "4" or i == "5" or i == "6" or i == "7" or i == "8" or i == "9":
@@ -210,7 +213,7 @@ class Parser:
             
     
     
-            
+    #checking if its with zero or without        
     def isDigit(self, i):  
         isIn = True;
             
@@ -218,7 +221,7 @@ class Parser:
             "true"
         else:
             self.isDigitWOZero(i)
-            
+    #function for calculating and checking if its true or not         
     def calculating(self, input, position):
         if(input.find("(")):
             k = input.find("(")
@@ -226,15 +229,15 @@ class Parser:
             for u in range(k, endOfClamp):
                 z = input[u]
                 if(z=="*"):
-                    vorM=input[u-1]
-                    nachM=input[u+1]
-                    ergM = int(vorM)*int(nachM)
+                    before=input[u-1]
+                    after=input[u+1]
+                    result = int(before)*int(after)
                     for rest in range(k+1, u):
                         if(input[rest]>="0" and input[rest]<="9"  ): #0-9
                             if(input[rest+1]=="+"):
-                                klammerAnf = input[rest]
-                                self.ergGanz = int(klammerAnf)+int(ergM)
-                                print(self.ergGanz)
+                                clampBegin = input[rest]
+                                self.endResult = int(clampBegin)+int(result)
+                                print(self.endResult)
                     
         self.position = 0
         if(input.find("=")):
@@ -260,5 +263,5 @@ class Parser:
     
 if __name__ == '__main__':
     p1 = Parser()
-    print(p1.parse("1+(4+5*6)=3+1"))
+    print(p1.parse("1+(1+2*3)=1+2"))
     
